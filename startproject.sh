@@ -36,23 +36,23 @@ cat $projectname/settings.py | sed -e "78s/sqlite3/postgresql/" > $projectname/t
 mv $projectname/tmp $projectname/settings.py
 cat $projectname/settings.py | sed -e "79s/os.path.join(BASE_DIR, 'db.sqlite3')/'postgres'/" > $projectname/tmp
 mv $projectname/tmp $projectname/settings.py
-sed -i "80i\ \ \ \ \ \ \ \ 'USER': 'postgres',"
-sed -i "81i\ \ \ \ \ \ \ \ 'HOST': 'db',"
-sed -i "82i\ \ \ \ \ \ \ \ 'PORT': 5432,"
+sed -i "80i\ \ \ \ \ \ \ \ 'USER': 'postgres'," $projectname/settings.py
+sed -i "81i\ \ \ \ \ \ \ \ 'HOST': 'db'," $projectname/settings.py
+sed -i "82i\ \ \ \ \ \ \ \ 'PORT': 5432," $projectname/settings.py
 
-echo "[+] Making initial migrations..."
-docker-compose run web python /django/manage.py mikemigrations
+echo "[+] Making initial migrations and migrating..."
+docker-compose run web python /django/manage.py makemigrations
 docker-compose run web python /django/manage.py migrate
 
-echo "[!] Done. Create Django superuser? [Y/n]"
-read choice
-if [ -z $choice ] || [ $choice == "y" ]; then
+echo "[!] Done. Create Django superuser?"
+read -p "[Y/n] ? " choice
+if [ -z $choice ] || [ $choice == "y" ] || [ $choice == "Y" ]; then
     docker-compose run web python /django/manage.py createsuperuser
 fi
 
-echo "[!] Initial project setup complete. Run development server?"
-read choice
-if [ -z $choice ] || [ $choice == "y" ]; then
+echo "[!] Initial project setup complete. Run development server now?"
+read -p "[Y/n] ? " choice
+if [ -z $choice ] || [ $choice == "y" ] || [ $choice == "Y" ]; then
     docker-compose up
 else
     echo "Quitting..."
