@@ -16,7 +16,6 @@ elif ! [  -x "$(command -v docker)" ]; then
     exit 1
 fi
 
-
 if [ "$1" ]; then
     projectname=$1
 else
@@ -26,10 +25,15 @@ fi
 
 echo "[+] Setting up '${projectname}'..."
 echo "[+] Running Django startproject..."
-
 docker-compose run web django-admin.py startproject $projectname .
+
 echo "[+] Docker creates files as root. Enter password when prompted to change ownership to ${USER}:${USER}"
 sudo chown -R $USER:$USER .
 echo "[!] Ownership granted to ${USER}."
 
 echo "[+] Updating ${projectname}/settings.py to use postgresql..."
+cat $projectname/settings.py | sed -e "78s/sqlite3/postgresql" > $projectname/tmp
+mv $projectname/tmp $projectname/settings.py
+cat $projectname/settings.py | sed -e "79s/os.path.join(BASE_DIR, 'db.sqlite3')/'postgres'" > $projectname/tmp
+mv $projectname/tmp $projectname/settings.py
+sed -i "80i\ \ \ \ \ \ \ \ 'USER': 'postgres',"
