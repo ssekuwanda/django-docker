@@ -28,4 +28,5 @@ echo "[+] Setting up '${projectname}'..."
 echo "[+] Running Django startproject..."
 
 docker-compose run web django-admin.py startproject $projectname .
-chown -R $USER:$USER
+echo "[+] Docker creates files as root. Enter password when prompted to change ownership to ${USER}:${USER}"
+sudo chown -R $USER:$USER .
