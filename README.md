@@ -1,6 +1,6 @@
 # django-docker
 
-Simple docker-compose setup for getting a django project going. See the official docs [here](https://docs.docker.com/compose/django/)
+Simple docker-compose setup for getting a Django/postgresql project going. See the official docs [here](https://docs.docker.com/compose/django/)
 
 
 ## Usage
@@ -11,11 +11,31 @@ Simple docker-compose setup for getting a django project going. See the official
     - [Arch](https://wiki.archlinux.org/index.php/Docker)
 2. Install [Docker Compose](https://docs.docker.com/compose/install/)    
     - Arch: install package `docker-compose`
-3. `git clone https://github.com/`
-4. In top project directory (contains Dockerfile, docker-compose.yml), run:
+3. `git clone https://github.com/jams2/django-docker && cd django-docker`
+4. Start the project and fix permissions (Docker creates files as root)
+    - `docker-compose run web django-admin.py startproject projectname .`
+    - `sudo chown -R $USER:$USER .`
+5. Connect database:
+    - in projectname/settings.py:
+    ```
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'postgres',
+            'USER': 'postgres',
+            'HOST': 'db',
+            'PORT': 5432,
+        }
+    }
+    ```
+6. Additional config:
     - `docker-compose run web python /code/manage.py createsuperuser`
     - `docker-compose run web python /code/manage.py makemigrations`
     - `docker-compose run web python /code/manage.py migrate`
+7. Mount the image and run the development server:
     - `docker-compose up`
+    - From there you should be able to access localhost:8000
+7. To get a shell in the Docker image:
+    - `docker-compose run web bash`
 
-From there you should be able to access localhost:8000, without having to configure database settings.
+Commands on the Image can be run with the prefix `docker-compose run web ...`
