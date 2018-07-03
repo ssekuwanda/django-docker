@@ -2,17 +2,17 @@
 
 if [ ! -f ./Dockerfile ]; then
     echo "[!] Dockerfile is missing."
-    echo "[!] Did you clone https://github.com/jams2/django-docker?"
+    echo "[-] Did you clone https://github.com/jams2/django-docker?"
     exit 1
 elif [ ! -f ./docker-compose.yml ]; then
     echo "[!] docker-compose.yml is missing."
-    echo "[!] Did you clone https://github.com/jams2/django-docker?"
+    echo "[-] Did you clone https://github.com/jams2/django-docker?"
     exit 1
 elif ! [ -x "$(command -v docker-compose)" ]; then
-    echo "[!] docker-compose must be installed. See README.md"
+    echo "[-] docker-compose must be installed. See README.md."
     exit 1
 elif ! [  -x "$(command -v docker)" ]; then
-    echo "[!] Docker must be installed. See README.md"
+    echo "[-] Docker must be installed. See README.md."
     exit 1
 fi
 
@@ -30,3 +30,6 @@ echo "[+] Running Django startproject..."
 docker-compose run web django-admin.py startproject $projectname .
 echo "[+] Docker creates files as root. Enter password when prompted to change ownership to ${USER}:${USER}"
 sudo chown -R $USER:$USER .
+echo "[!] Ownership granted to ${USER}."
+
+echo "[+] Updating ${projectname}/settings.py to use postgresql..."
