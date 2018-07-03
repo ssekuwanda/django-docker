@@ -44,11 +44,11 @@ Simple docker-compose setup for getting a Django/postgresql project going. See t
 4. Mount the image and run the development server:
     - `docker-compose up`
     - From there you should be able to access localhost:8000
-5. To get a shell in the Docker image:
-    - `docker-compose run web bash`
 
 ---
 
 ### Notes:
 
 - Commands on the Image can be run with the prefix `docker-compose run web ...`
+- To get a shell in the Docker image:
+    - `docker-compose run web bash`
