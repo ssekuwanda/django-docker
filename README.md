@@ -3,7 +3,7 @@
 Simple docker-compose setup for getting a Django/postgresql project going. See the official docs [here](https://docs.docker.com/compose/django/)
 
 
-# Usage
+### Getting started:
 
 1. Install Docker
     - [OSX](https://docs.docker.com/docker-for-mac/install/)
@@ -14,11 +14,12 @@ Simple docker-compose setup for getting a Django/postgresql project going. See t
 3. `git clone https://github.com/jams2/django-docker && cd django-docker`
 
 
-## The short way:
+### The short way:
 
 `./startproject.sh projectname` and follow the prompts.
 
-## The long way:
+
+### The long way:
 
 1. Start the project and fix permissions (Docker creates files as root)
     - `docker-compose run web django-admin.py startproject projectname .`
@@ -46,4 +47,8 @@ Simple docker-compose setup for getting a Django/postgresql project going. See t
 5. To get a shell in the Docker image:
     - `docker-compose run web bash`
 
-Commands on the Image can be run with the prefix `docker-compose run web ...`
+---
+
+### Notes:
+
+- Commands on the Image can be run with the prefix `docker-compose run web ...`
