@@ -38,9 +38,9 @@ Simple docker-compose setup for getting a Django/postgresql project going. See t
     }
     ```
 3. Additional config:
-    - `docker-compose run web python /code/manage.py createsuperuser`
-    - `docker-compose run web python /code/manage.py makemigrations`
-    - `docker-compose run web python /code/manage.py migrate`
+    - `docker-compose run web python /django/manage.py createsuperuser`
+    - `docker-compose run web python /django/manage.py makemigrations`
+    - `docker-compose run web python /django/manage.py migrate`
 4. Mount the image and run the development server:
     - `docker-compose up`
     - From there you should be able to access localhost:8000
@@ -52,3 +52,7 @@ Simple docker-compose setup for getting a Django/postgresql project going. See t
 - Commands on the Image can be run with the prefix `docker-compose run web ...`
 - To get a shell in the Docker image:
     - `docker-compose run web bash`
+- For ease of running commands I usually `alias drw="docker-compose run web"`, 
+    which shortens:
+    - `docker-compose run web python /django/manage.py test`, to
+    - `drw python /django/manage.py test`
