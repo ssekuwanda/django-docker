@@ -39,11 +39,11 @@ Simple docker-compose setup for getting a Django/postgresql project going. See t
     ```
 3. Additional config:
     - `docker-compose run web python /django/manage.py createsuperuser`
-    - `docker-compose run web python /django/manage.py makemigrations`
     - `docker-compose run web python /django/manage.py migrate`
 4. Mount the image and run the development server:
-    - `docker-compose up`
-    - From there you should be able to access localhost:8000
+    - `docker-compose up`, `-d` to detach and run in background. `docker-compose stop` to stop processes.
+
+Development server should be running on localhost:8000
 
 ---
 
@@ -56,3 +56,4 @@ Simple docker-compose setup for getting a Django/postgresql project going. See t
     which shortens:
     - `docker-compose run web python /django/manage.py test`, to
     - `drw python /django/manage.py test`
+- `docker-compose down` will remove the image. Persistent data (e.g. database entries) will be lost.

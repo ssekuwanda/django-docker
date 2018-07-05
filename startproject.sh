@@ -19,7 +19,7 @@ fi
 if [ "$1" ]; then
     projectname=$1
 else
-    printf "[!] Specify name of new Django project.\n"
+    printf "[!] Usage: ./startproject.sh projectname\n"
     exit 1
 fi
 
@@ -32,28 +32,25 @@ sudo chown -R $USER:$USER .
 printf "[!] Ownership granted to ${USER}.\n"
 
 printf "[+] Updating ${projectname}/settings.py to use postgresql...\n"
-cat $projectname/settings.py | sed -e "78s/sqlite3/postgresql/" > $projectname/tmp
-mv $projectname/tmp $projectname/settings.py
-cat $projectname/settings.py | sed -e "79s/os.path.join(BASE_DIR, 'db.sqlite3')/'postgres'/" > $projectname/tmp
-mv $projectname/tmp $projectname/settings.py
+sed -i "78s/sqlite3/postgresql/" $projectname/settings.py
+sed -i "79s/os.path.join(BASE_DIR, 'db.sqlite3')/'postgres'/" $projectname/settings.py
 sed -i "80i\ \ \ \ \ \ \ \ 'USER': 'postgres'," $projectname/settings.py
 sed -i "81i\ \ \ \ \ \ \ \ 'HOST': 'db'," $projectname/settings.py
 sed -i "82i\ \ \ \ \ \ \ \ 'PORT': 5432," $projectname/settings.py
 
-printf "[+] Making initial migrations and migrating...\n"
-docker-compose run web python /django/manage.py makemigrations
+printf "[+] Performing initial migration..."
 docker-compose run web python /django/manage.py migrate
 
 printf "[!] Done. Create Django superuser?"
-read -p " [Y/n]" choice
-if [ -z $choice ] || [ $choice == "y" ] || [ $choice == "Y" ]; then
+read -p " [Y/n] " choice
+if [ -z $choice ] || [ $choice == y* ] || [ $choice == Y* ]; then
     docker-compose run web python /django/manage.py createsuperuser
 fi
 
 printf "[!] Initial project setup complete. Run development server now?"
-read -p " [Y/n]" choice
-if [ -z $choice ] || [ $choice == "y" ] || [ $choice == "Y" ]; then
-    docker-compose up
+read -p " [Y/n] " choice
+if [ -z $choice ] || [ $choice == y* ] || [ $choice == Y* ]; then
+    exec docker-compose up
 else
     printf "Quitting...\n"
 fi
